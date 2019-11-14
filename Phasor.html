@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Phasor Vector Drawer</title>
+</head>
+<body>
+    <label>V_r</label>
+    <input type="number" id="vr"></input>
+    <label>V_C</label>
+    <input type="number" id="vc"></input>
+    <label>V_LRCr</label>
+    <input type="number" id="vlrc"></input>
+    <label>V_Lr</label>
+    <input type="number" id="vlr"></input>
+    <label>Scale</label>
+    <input type="number" id="scale"></input>
+    <input type="button" id="submit" onclick="update()" value="Draw"></input>
+    </br>
+    <canvas id="canvas" width="1000" height="1000" style="border:1px solid #000000;">
+    </canvas>
+    <script>
+        var vr = document.getElementById("vr");
+        var vc = document.getElementById("vc");
+        var vlrc = document.getElementById("vlrc");
+        var vlr = document.getElementById("vlr");
+        var scale = document.getElementById("scale");
+        
+        function update(){
+            draw(scale.value, vr.value, vc.value, vlrc.value, vlr.value);
+        }
+
+        function draw(scale, Vr, Vc, Vlrc, Vlr) {
+            var can = document.getElementById("canvas");
+            var ctx = can.getContext("2d");
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.setLineDash([]);
+            ctx.strokeStyle = "#000000";
+            ctx.fillStyle = "#000000";
+            Vr*=scale;
+            Vc*=scale;
+            Vlrc*=scale;
+            Vlr*=scale;
+            var center = { x: 100, y: 400 };
+            ctx.beginPath();
+            ctx.moveTo(center.x, center.y);
+            ctx.font = "20px Georgia";
+            ctx.fillText("V_R", (center.x + center.x + Vr) / 2, center.y + 20);
+            ctx.lineTo(center.x + Vr, center.y);
+            ctx.fillText("V_C", center.x + Vr - 50, (center.y + center.y + Vc) / 2);
+            ctx.lineTo(center.x + Vr, center.y + Vc);
+            var i = intersection(center.x + Vr, center.y + Vc, Vlr, center.x, center.y, Vlrc);
+            ctx.lineTo(i[0], i[2]);
+            ctx.fillText("V_r", (center.x + Vr + i[0]) / 2 - 15, (center.y + Vc) + 20);
+            ctx.fillText("V_L", (i[0]) + 15, (i[2] + center.y + Vc) / 2);
+            ctx.lineTo(center.x, center.y);
+            ctx.stroke();
+            ctx.beginPath();
+            if(i[2]>center.y)
+                ctx.arc(center.x, center.y, Vr / 5, 0, -Math.asin((center.y - i[2]) / Vlrc));
+            else
+                ctx.arc(center.x, center.y, Vr / 5, -Math.asin((center.y - i[2]) / Vlrc),0);  
+            ctx.fillText("Φ", center.x - 20, (center.y));
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.strokeStyle = "#FF0000";
+            ctx.fillStyle = "#FF0000";
+            ctx.arc(center.x + Vr, center.y + Vc, Vlr, -Math.PI, 0);
+            ctx.fillText("V_Lr", (i[0] + center.x + Vr) / 2 + 10, (i[2] + center.y + Vc) / 2 + 10);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.strokeStyle = "#0000FF";
+            ctx.fillStyle = "#0000FF";
+            ctx.arc(center.x, center.y, Vlrc, -Math.PI / 2, Math.PI / 2);
+            ctx.fillText("V_LRCr", (i[0] + center.x) / 2 + 10, (i[2] + center.y) / 2 + 10);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.strokeStyle = "#000000";
+            ctx.setLineDash([5, 15]);
+            ctx.moveTo(center.x + Vr, center.y + Vc);
+            ctx.lineTo(i[0], center.y + Vc);
+            ctx.lineTo(i[0], i[2]);
+            ctx.stroke();
+        }
+
+        function intersection(x0, y0, r0, x1, y1, r1) {
+            var a, dx, dy, d, h, rx, ry;
+            var x2, y2;
+
+            /* dx and dy are the vertical and horizontal distances between
+                * the circle centers.
+                */
+            dx = x1 - x0;
+            dy = y1 - y0;
+
+            /* Determine the straight-line distance between the centers. */
+            d = Math.sqrt((dy * dy) + (dx * dx));
+
+            /* Check for solvability. */
+            if (d > (r0 + r1)) {
+                /* no solution. circles do not intersect. */
+                return false;
+            }
+            if (d < Math.abs(r0 - r1)) {
+                /* no solution. one circle is contained in the other */
+                return false;
+            }
+
+            /* 'point 2' is the point where the line through the circle
+                * intersection points crosses the line between the circle
+                * centers.  
+                */
+
+            /* Determine the distance from point 0 to point 2. */
+            a = ((r0 * r0) - (r1 * r1) + (d * d)) / (2.0 * d);
+
+            /* Determine the coordinates of point 2. */
+            x2 = x0 + (dx * a / d);
+            y2 = y0 + (dy * a / d);
+
+            /* Determine the distance from point 2 to either of the
+                * intersection points.
+                */
+            h = Math.sqrt((r0 * r0) - (a * a));
+
+            /* Now determine the offsets of the intersection points from
+                * point 2.
+                */
+            rx = -dy * (h / d);
+            ry = dx * (h / d);
+
+            /* Determine the absolute intersection points. */
+            var xi = x2 + rx;
+            var xi_prime = x2 - rx;
+            var yi = y2 + ry;
+            var yi_prime = y2 - ry;
+
+            return [xi, xi_prime, yi, yi_prime];
+        }
+    </script>
+</body>
+
+</html>
