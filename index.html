@@ -15,6 +15,7 @@
     <label>Scale</label>
     <input type="number" id="scale"></input>
     <input type="button" id="submit" onclick="update()" value="Draw"></input>
+    <p id="output"></p>
     </br>
     <canvas id="canvas" width="1000" height="1000" style="border:1px solid #000000;">
     </canvas>
@@ -24,6 +25,7 @@
         var vlrc = document.getElementById("vlrc");
         var vlr = document.getElementById("vlr");
         var scale = document.getElementById("scale");
+        var p = document.getElementById("output");
         
         function update(){
             draw(scale.value, vr.value, vc.value, vlrc.value, vlr.value);
@@ -61,6 +63,8 @@
                 ctx.arc(center.x, center.y, Vr / 5, -Math.asin((center.y - i[2]) / Vlrc),0);  
             ctx.fillText("Φ", center.x - 20, (center.y));
             ctx.stroke();
+
+            p.innerHTML = "V_r = "+((i[0]-center.x)/scale)+" V_L = " + ((-i[2]+center.y)/scale);
 
             ctx.beginPath();
             ctx.strokeStyle = "#FF0000";
