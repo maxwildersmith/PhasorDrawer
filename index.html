@@ -66,7 +66,7 @@
             ctx.fillText("Φ", center.x - 20, (center.y));
             ctx.stroke();
 
-            p.innerHTML = "V_r = "+((i[0]-center.x)/scale)+" \t _L = " + ((-i[2]+center.y)/scale)+ " \t Φ = "+Math.atan(i[2]/i[0])+" radians";
+            p.innerHTML = "V_r = "+((i[0]-center.x)/scale)+" \t _L = " + ((-i[2]+center.y)/scale)+ " \t Φ = "+Math.atan((-i[2]+center.y)/(i[0]-center.x))+" radians";
 
             ctx.beginPath();
             ctx.strokeStyle = "#FF0000";
