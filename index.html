@@ -4,7 +4,7 @@
     <title>Phasor Vector Drawer</title>
 </head>
 <body>
-    <label>V_r</label>
+    <label>V_R</label>
     <input type="number" id="vr" value="1.5"></input>
     <label>V_C</label>
     <input type="number" id="vc" value="2.75"></input>
@@ -66,7 +66,7 @@
             ctx.fillText("Φ", center.x - 20, (center.y));
             ctx.stroke();
 
-            p.innerHTML = "V_r = "+((i[0]-center.x)/scale)+" \t _L = " + ((-i[2]+center.y)/scale)+ " \t Φ = "+Math.atan((-i[2]+center.y)/(i[0]-center.x))+" radians";
+            p.innerHTML = "V_r = "+((i[0]-center.x)/scale)+" \t V_L = " + ((-i[2]+center.y+Vc)/scale)+ " \t Φ = "+Math.atan((-i[2]+center.y)/(i[0]-center.x))+" radians";
 
             ctx.beginPath();
             ctx.strokeStyle = "#FF0000";
