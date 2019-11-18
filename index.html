@@ -44,7 +44,7 @@
             Vc*=scale;
             Vlrc*=scale;
             Vlr*=scale;
-            var center = { x: 100, y: 400 };
+            var center = { x: 100, y: 600 };
             ctx.beginPath();
             ctx.moveTo(center.x, center.y);
             ctx.font = "20px Georgia";
@@ -59,11 +59,8 @@
             ctx.lineTo(center.x, center.y);
             ctx.stroke();
             ctx.beginPath();
-            if(i[2]>center.y)
-                ctx.arc(center.x, center.y, Vr / 5, 0, -Math.asin((center.y - i[2]) / Vlrc));
-            else
-                ctx.arc(center.x, center.y, Vr / 5, -Math.asin((center.y - i[2]) / Vlrc),0);  
-            ctx.fillText("Φ", center.x - 20, (center.y));
+                ctx.arc(center.x+Vr, center.y+Vc, Vr / 5, -Math.asin((center.y+Vc - i[2]) / Vlr),0);
+            ctx.fillText("Φ", center.x - 20 + Vr, (center.y + Vc));
             ctx.stroke();
 
             p.innerHTML = "V_r = "+((i[0]-center.x-Vr)/scale)+" \t V_L = " + ((-i[2]+center.y+Vc)/scale)+ " \t Φ = "+Math.atan((-i[2]+center.y)/(i[0]-center.x))+" radians";
